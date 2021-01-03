@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>densogiaichned</Authors>
+    <Company>densogiaichned</Company>
+    <Version>0.1.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock</PackageProjectUrl>
+    <Description>Mocking a TwinCAT Ads Server, for unit testing code with e.g. ADS read/write requests.</Description>
+    <Copyright>Copyright (c) 2021 densogiaichned</Copyright>
+    <RepositoryUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock</RepositoryUrl>
+    <PackageTags>.Net5 Beckhoff TwinCAT TwinCAT.ADS mock test fake</PackageTags>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Beckhoff.TwinCAT.Ads.Server" Version="5.0.297" />
+  </ItemGroup>
+
+</Project>

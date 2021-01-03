@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dsian.TwinCAT.Ads.Server.Mock", "src\dsian.TwinCAT.Ads.Server.Mock\dsian.TwinCAT.Ads.Server.Mock.csproj", "{690B8988-7F0D-47DE-9397-E77DAB0D01AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{786547B6-6D62-4139-BEDF-D770A81F8BF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dsian.TwinCAT.Ads.Server.Mock.Tests", "tests\dsian.TwinCAT.Ads.Server.Mock.Tests\dsian.TwinCAT.Ads.Server.Mock.Tests.csproj", "{90324759-AA68-48F0-B8CD-C10C5AB1B053}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F0ABF005-CF77-49BA-B274-2D8BA1FE4A4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoConsole", "samples\DemoConsole\DemoConsole.csproj", "{B6F29FD3-C44A-4BAC-98A8-3C7202D83820}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{50A3DB31-D155-438F-B196-6204C42C2EA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{690B8988-7F0D-47DE-9397-E77DAB0D01AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{690B8988-7F0D-47DE-9397-E77DAB0D01AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{690B8988-7F0D-47DE-9397-E77DAB0D01AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{690B8988-7F0D-47DE-9397-E77DAB0D01AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90324759-AA68-48F0-B8CD-C10C5AB1B053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90324759-AA68-48F0-B8CD-C10C5AB1B053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90324759-AA68-48F0-B8CD-C10C5AB1B053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90324759-AA68-48F0-B8CD-C10C5AB1B053}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F29FD3-C44A-4BAC-98A8-3C7202D83820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F29FD3-C44A-4BAC-98A8-3C7202D83820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F29FD3-C44A-4BAC-98A8-3C7202D83820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F29FD3-C44A-4BAC-98A8-3C7202D83820}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{690B8988-7F0D-47DE-9397-E77DAB0D01AD} = {786547B6-6D62-4139-BEDF-D770A81F8BF9}
+		{90324759-AA68-48F0-B8CD-C10C5AB1B053} = {F0ABF005-CF77-49BA-B274-2D8BA1FE4A4C}
+		{B6F29FD3-C44A-4BAC-98A8-3C7202D83820} = {50A3DB31-D155-438F-B196-6204C42C2EA0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5876B57D-CA3D-4276-9171-3443354B43AC}
+	EndGlobalSection
+EndGlobal

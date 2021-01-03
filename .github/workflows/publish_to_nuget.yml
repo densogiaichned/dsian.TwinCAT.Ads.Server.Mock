@@ -1,0 +1,26 @@
+name: publish_to_nuget
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    name: build, pack & publish
+    runs-on:  windows-2019 
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup dotnet
+       uses: actions/setup-dotnet@v1
+
+     - name: Build                  
+       run: dotnet build
+     - name: Test
+       run: dotnet test
+      # Publish
+    #  - name: publish on version change
+    #    id: publish_nuget
+    #    uses: rohith/publish-nuget@v2
+    #    with:
+    #      # Filepath of the project to be packaged, relative to root of repository
+    #      PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock/dsian.TwinCAT.Ads.Server.Mock.csproj
+    #      NUGET_KEY: ${{secrets.NUGET_API_KEY}}
