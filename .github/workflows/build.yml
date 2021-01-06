@@ -1,4 +1,4 @@
-name: nuget
+name: build
 on:
   push:
     branches:
@@ -6,14 +6,15 @@ on:
 jobs:
   publish:
     name: build, pack & publish
-    runs-on:  windows-2019 
+    runs-on:  windows-latest 
     steps:
      - uses: actions/checkout@v2
      - name: Setup dotnet
        uses: actions/setup-dotnet@v1
-
+     - name: Clean nuget
+       run: dotnet nuget locals all --clear 
      - name: Build                  
-       run: dotnet build
+       run: dotnet build -c Release
      - name: Test
        run: dotnet test
       # Publish
