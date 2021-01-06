@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,34 +13,45 @@ namespace dsian.TwinCAT.Ads.Server.Mock
     /// </summary>
     public class Mock : AdsServer
     {
-
-        private List<Behavior> _BehaviorList = new List<Behavior>();
-
+        private ILogger? _Logger = null;
+        private BehaviorManager? _behaviorManager = null;
+        private string _PortName = "dsian";
         public Mock(string portName) : base(portName)
         {
+
+            Init(portName);
             Connect();
         }
 
         public Mock(ushort port, string portName) : base(port, portName)
         {
+            Init(portName);
             Connect();
         }
 
         public Mock(string portName, ILogger? logger) : base(portName, logger)
         {
+            Init(portName, logger);
             Connect();
         }
 
         public Mock(ushort port, string portName, ILogger? logger) : base(port, portName, logger)
         {
+            Init(portName, logger);
             Connect();
         }
 
         public Mock(ushort port, string portName, bool useSingleNotificationHandler, ILogger? logger) : base(port, portName, useSingleNotificationHandler, logger)
         {
+            Init(portName, logger);
             Connect();
         }
 
+        private void Init(string portName, ILogger? logger = null)
+        {
+            _PortName = portName;
+            _behaviorManager = new BehaviorManager(logger);
+        }
         private void Connect()
         {
             var res = base.ConnectServer();
@@ -55,7 +65,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         /// <returns></returns>
         public Mock RegisterBehavior(Behavior behavior)
         {
-            _BehaviorList.Add(behavior);
+            _behaviorManager?.RegisterBehavior(behavior);
+
             return this;
         }
 
@@ -64,46 +75,128 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         {
             return responseData switch
             {
-                null => (readLength == 0,0),
-                not null => ((readLength > 0), Math.Min(responseData.Value.Length,readLength))
+                null => (readLength == 0, 0),
+                not null => ((readLength > 0), Math.Min(responseData.Value.Length, readLength))
             };
         }
 
         protected override Task<AdsErrorCode> ReadIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int readLength, CancellationToken cancel)
         {
 
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadIndicationBehavior>()?
+                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
+                            .Select(b => b)
+                            .FirstOrDefault();
 
-            var behavior = (from b in _BehaviorList
-                            where b is ReadIndicationBehavior && (b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
-                            select b).FirstOrDefault() as ReadIndicationBehavior;
+            if (behavior is null)
+                return base.ReadIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, cancel);
 
-            if (behavior is not null)
-            {
-                var (lenOk, len) = LenghtIsOk(behavior.ResponseData, readLength);
-                if (lenOk)
-                    return ReadResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseData.Slice(0,len), cancel);
-                else
-                    return ReadResponseAsync(sender, invokeId, AdsErrorCode.DeviceInvalidParam, null, cancel);
-            }
+            var (lenOk, len) = LenghtIsOk(behavior.ResponseData, readLength);
+            if (lenOk)
+                return ReadResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseData.Slice(0, len), cancel);
             else
-                return ReadResponseAsync(sender, invokeId, AdsErrorCode.DeviceServiceNotSupported, null, cancel);
+                return ReadResponseAsync(sender, invokeId, AdsErrorCode.DeviceInvalidParam, null, cancel);
         }
 
         protected override Task<AdsErrorCode> WriteIndicationAsync(AmsAddress target, uint invokeId, uint indexGroup, uint indexOffset, ReadOnlyMemory<byte> writeData, CancellationToken cancel)
         {
+            var behavior = _behaviorManager?
+                            .GetBehaviorOfType<WriteIndicationBehavior>()?
+                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
+                            .Select(b => b)
+                            .FirstOrDefault() as WriteIndicationBehavior;
+
+            if (behavior is null)
+                return base.WriteIndicationAsync(target, invokeId, indexGroup, indexOffset, writeData, cancel);
+
+            var errCode = behavior.ExpectedLength == writeData.Length ? behavior.ErrorCode : AdsErrorCode.DeviceInvalidSize;
+            return WriteResponseAsync(target, invokeId, behavior.ErrorCode, cancel);
+        }
 
 
-            var behavior = (from b in _BehaviorList
-                            where b is WriteIndicationBehavior && (b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
-                            select b).FirstOrDefault() as WriteIndicationBehavior;
+        protected override Task<AdsErrorCode> ReadWriteIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int readLength, ReadOnlyMemory<byte> writeData, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadWriteIndicationBehavior>()?
+                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
+                            .Select(b => b)
+                            .FirstOrDefault() as ReadWriteIndicationBehavior;
 
-            if (behavior is not null)
-            {
-                var errCode = behavior.ExpectedLength == writeData.Length ? behavior.ErrorCode : AdsErrorCode.DeviceInvalidSize;
-                return WriteResponseAsync(target, invokeId, behavior.ErrorCode, cancel);
-            }
+            if (behavior is null)
+                return base.ReadWriteIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, writeData, cancel);
+
+            var errCode = behavior.ExpectedLength == writeData.Length ? behavior.ErrorCode : AdsErrorCode.DeviceInvalidSize;
+            var (lenOk, len) = LenghtIsOk(behavior.ResponseData, readLength);
+            if (lenOk)
+                return ReadWriteResponseAsync(sender, invokeId, errCode, behavior.ResponseData.Slice(0, len), cancel);
             else
-                return WriteResponseAsync(target, invokeId, AdsErrorCode.DeviceServiceNotSupported, cancel);
+                return ReadWriteResponseAsync(sender, invokeId, AdsErrorCode.DeviceInvalidParam, null, cancel);
+        }
+
+        protected override Task<AdsErrorCode> AddDeviceNotificationIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int dataLength, NotificationSettings settings, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<AddDeviceNotificationIndicationBehavior>()?
+                .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset && b.ExpectedLength == dataLength &&
+                (b.ExpectedNotificationSettings != null ? b.ExpectedNotificationSettings == settings : true)    // optional
+                )
+                .Select(b => b)
+                .FirstOrDefault();
+
+            if (behavior is null)
+                return base.AddDeviceNotificationIndicationAsync(sender, invokeId, indexGroup, indexOffset, dataLength, settings, cancel);
+
+            return AddDeviceNotificationResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseNotificationHandle, cancel);
+        }
+
+        protected override Task<AdsErrorCode> ReadDeviceStateIndicationAsync(AmsAddress sender, uint invokeId, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadDeviceStateIndicationBehavior>()?
+                            .Select(b => b)
+                            .FirstOrDefault();
+
+            if (behavior is null)
+                return base.ReadDeviceStateIndicationAsync(sender, invokeId, cancel);
+
+            return ReadDeviceStateResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseAdsState, behavior.ResponseDeviceState, cancel);
+        }
+
+
+        protected override Task<AdsErrorCode> WriteControlIndicationAsync(AmsAddress sender, uint invokeId, AdsState adsState, ushort deviceState, ReadOnlyMemory<byte> data, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<WriteControlIndicationBehavior>()?
+                .Where(b => b.ExpectedAdsState == adsState && b.ExpectedDeviceState == deviceState && b.ExpectedLength == data.Length)
+                .Select(b => b)
+                .FirstOrDefault();
+
+            if (behavior is null)
+                return base.WriteControlIndicationAsync(sender, invokeId, adsState, deviceState, data, cancel);
+
+            return WriteControlResponseAsync(sender, invokeId, behavior.ErrorCode, cancel);
+        }
+
+        protected override Task<AdsErrorCode> DeleteDeviceNotificationIndicationAsync(AmsAddress sender, uint invokeId, uint hNotification, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<DeleteDeviceNotificationIndicationBehavior>()?
+                .Where(b => b.RequestNotificationHandle == hNotification)
+                .Select(b => b)
+                .FirstOrDefault();
+
+            if (behavior is null)
+                return base.DeleteDeviceNotificationIndicationAsync(sender, invokeId, hNotification, cancel);
+
+            return DeleteDeviceNotificationResponseAsync(sender, invokeId, behavior.ErrorCode, cancel);
+        }
+
+
+        protected override Task<AdsErrorCode> ReadDeviceInfoIndicationAsync(AmsAddress sender, uint invokeId, CancellationToken cancel)
+        {
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadDeviceInfoIndicationBehavior>()?
+                .Select(b => b)
+                .FirstOrDefault();
+
+            if (behavior is null)
+                return ReadDeviceInfoResponseAsync(sender, invokeId, AdsErrorCode.DeviceServiceNotSupported, _PortName, AdsVersion.Empty, cancel);
+
+            return ReadDeviceInfoResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseDeviceName, new AdsVersion(behavior.ResponseMajorVersion, behavior.ResponseMinorVersion, behavior.VersionBuild), cancel);
         }
 
     }

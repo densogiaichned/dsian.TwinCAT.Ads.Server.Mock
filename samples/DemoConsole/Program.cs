@@ -30,7 +30,7 @@ namespace DemoConsole
                     mockServer.RegisterBehavior(new ReadIndicationBehavior(1, 123,  Enumerable.Range(1,32).Select(i => (byte)i).ToArray()))
                               .RegisterBehavior(new ReadIndicationBehavior(1, 1, Encoding.UTF8.GetBytes("acting as a ADS server")))
                               .RegisterBehavior(new ReadIndicationBehavior(0, 0, null, AdsErrorCode.DeviceAccessDenied))
-                              .RegisterBehavior(new WriteIndicationBehavior(0, 0, 5, null));
+                              .RegisterBehavior(new WriteIndicationBehavior(0, 0, 22));
 
                     Console.WriteLine("Server up and running");
 
