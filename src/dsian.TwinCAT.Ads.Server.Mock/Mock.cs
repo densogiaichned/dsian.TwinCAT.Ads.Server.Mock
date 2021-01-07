@@ -60,16 +60,15 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             {
                 var res = base.ConnectServer();
                 if (IsConnected)
-                    _Logger?.LogDebug("Server \"{ServerName}\" with address \"{ServerAddress}\" connected.",  _PortName, ServerAddress);
+                    _Logger?.LogDebug("Server \"{ServerName}\" with address \"{ServerAddress}\" connected.", _PortName, ServerAddress);
                 else
-                    _Logger?.LogWarning("Could not connect server \"{ServerName}\" with address \"{ServerAddress}\".",  _PortName, ServerAddress );
+                    _Logger?.LogWarning("Could not connect server \"{ServerName}\" with address \"{ServerAddress}\".", _PortName, ServerAddress);
             }
-            catch(AdsException ex)
+            catch (AdsException ex)
             {
-                _Logger?.LogError(ex, "Could not register server \"{ServerName}\".",_PortName);
+                _Logger?.LogError(ex, "Could not register server \"{ServerName}\".", _PortName);
             }
         }
-
 
         /// <summary>
         /// Registers a behavior, which controls the response of a ADS read/write function.
@@ -96,10 +95,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         protected override Task<AdsErrorCode> ReadIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int readLength, CancellationToken cancel)
         {
 
-            var behavior = _behaviorManager?.GetBehaviorOfType<ReadIndicationBehavior>()?
-                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
-                            .Select(b => b)
-                            .FirstOrDefault();
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadIndicationBehavior>(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset);
 
             if (behavior is null)
                 return base.ReadIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, cancel);
@@ -113,11 +109,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<AdsErrorCode> WriteIndicationAsync(AmsAddress target, uint invokeId, uint indexGroup, uint indexOffset, ReadOnlyMemory<byte> writeData, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?
-                            .GetBehaviorOfType<WriteIndicationBehavior>()?
-                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
-                            .Select(b => b)
-                            .FirstOrDefault() as WriteIndicationBehavior;
+            var behavior = _behaviorManager?.GetBehaviorOfType<WriteIndicationBehavior>(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset);
+
 
             if (behavior is null)
                 return base.WriteIndicationAsync(target, invokeId, indexGroup, indexOffset, writeData, cancel);
@@ -129,10 +122,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<AdsErrorCode> ReadWriteIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int readLength, ReadOnlyMemory<byte> writeData, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?.GetBehaviorOfType<ReadWriteIndicationBehavior>()?
-                            .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset)
-                            .Select(b => b)
-                            .FirstOrDefault() as ReadWriteIndicationBehavior;
+            var behavior = _behaviorManager?.GetBehaviorOfType<ReadWriteIndicationBehavior>(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset);
 
             if (behavior is null)
                 return base.ReadWriteIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, writeData, cancel);
@@ -147,12 +137,10 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<AdsErrorCode> AddDeviceNotificationIndicationAsync(AmsAddress sender, uint invokeId, uint indexGroup, uint indexOffset, int dataLength, NotificationSettings settings, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?.GetBehaviorOfType<AddDeviceNotificationIndicationBehavior>()?
-                .Where(b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset && b.ExpectedLength == dataLength &&
+            var behavior = _behaviorManager?.GetBehaviorOfType<AddDeviceNotificationIndicationBehavior>(
+                b => b.IndexGroup == indexGroup && b.IndexOffset == indexOffset && b.ExpectedLength == dataLength &&
                 (b.ExpectedNotificationSettings != null ? b.ExpectedNotificationSettings == settings : true)    // optional
-                )
-                .Select(b => b)
-                .FirstOrDefault();
+                );
 
             if (behavior is null)
                 return base.AddDeviceNotificationIndicationAsync(sender, invokeId, indexGroup, indexOffset, dataLength, settings, cancel);
@@ -175,10 +163,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<AdsErrorCode> WriteControlIndicationAsync(AmsAddress sender, uint invokeId, AdsState adsState, ushort deviceState, ReadOnlyMemory<byte> data, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?.GetBehaviorOfType<WriteControlIndicationBehavior>()?
-                .Where(b => b.ExpectedAdsState == adsState && b.ExpectedDeviceState == deviceState && b.ExpectedLength == data.Length)
-                .Select(b => b)
-                .FirstOrDefault();
+            var behavior = _behaviorManager?.GetBehaviorOfType<WriteControlIndicationBehavior>(b => b.ExpectedAdsState == adsState && b.ExpectedDeviceState == deviceState && b.ExpectedLength == data.Length);
 
             if (behavior is null)
                 return base.WriteControlIndicationAsync(sender, invokeId, adsState, deviceState, data, cancel);
@@ -188,10 +173,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<AdsErrorCode> DeleteDeviceNotificationIndicationAsync(AmsAddress sender, uint invokeId, uint hNotification, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?.GetBehaviorOfType<DeleteDeviceNotificationIndicationBehavior>()?
-                .Where(b => b.RequestNotificationHandle == hNotification)
-                .Select(b => b)
-                .FirstOrDefault();
+            var behavior = _behaviorManager?.GetBehaviorOfType<DeleteDeviceNotificationIndicationBehavior>(b => b.RequestNotificationHandle == hNotification);
 
             if (behavior is null)
                 return base.DeleteDeviceNotificationIndicationAsync(sender, invokeId, hNotification, cancel);
