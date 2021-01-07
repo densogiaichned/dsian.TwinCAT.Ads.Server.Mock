@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.Server;
 
@@ -49,12 +50,24 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         private void Init(string portName, ILogger? logger = null)
         {
+            _Logger = logger;
             _PortName = portName;
             _behaviorManager = new BehaviorManager(logger);
         }
         private void Connect()
         {
-            var res = base.ConnectServer();
+            try
+            {
+                var res = base.ConnectServer();
+                if (IsConnected)
+                    _Logger?.LogDebug("Server \"{ServerName}\" with address \"{ServerAddress}\" connected.",  _PortName, ServerAddress);
+                else
+                    _Logger?.LogWarning("Could not connect server \"{ServerName}\" with address \"{ServerAddress}\".",  _PortName, ServerAddress );
+            }
+            catch(AdsException ex)
+            {
+                _Logger?.LogError(ex, "Could not register server \"{ServerName}\".",_PortName);
+            }
         }
 
 

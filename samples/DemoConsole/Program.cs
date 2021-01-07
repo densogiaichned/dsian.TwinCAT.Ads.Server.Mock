@@ -22,9 +22,9 @@ namespace DemoConsole
                 var logger = serviceProvider.GetService<ILogger<Program>>();
 
                 // setup mocking server
-                ushort port = 12345;
+                ushort port = 0xffff;
                 string portName = "MyTestPort";
-                using (var mockServer = new Mock(port, portName))
+                using (var mockServer = new Mock(port, portName,logger))
                 {
                     var serverBuffer = new byte[65535];
                     mockServer.RegisterBehavior(new ReadIndicationBehavior(1, 123,  Enumerable.Range(1,32).Select(i => (byte)i).ToArray()))
