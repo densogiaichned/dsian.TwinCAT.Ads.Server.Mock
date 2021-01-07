@@ -1,5 +1,5 @@
 
-![build](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/workflows/nuget/badge.svg)
+![build](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/workflows/build/badge.svg?branch=main)
 # dsian.TwinCAT.Ads.Server.Mock
 
 Mocking a TwinCAT Ads Server, for unit testing code with ADS read/write requests.  
