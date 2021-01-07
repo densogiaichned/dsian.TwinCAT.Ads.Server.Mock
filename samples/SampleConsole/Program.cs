@@ -1,6 +1,7 @@
 ﻿using dsian.TwinCAT.Ads.Server.Mock;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TwinCAT.Ads;
 
-namespace DemoConsole
+namespace SampleConsole
 {
     class Program
     {
@@ -23,11 +24,11 @@ namespace DemoConsole
 
                 // setup mocking server
                 ushort port = 12345;
-                string portName = "MyTestPort";
-                using (var mockServer = new Mock(port, portName))
+                string portName = "MyTestAdsServer";
+                using (var mockServer = new Mock(port, portName, logger))
                 {
                     var serverBuffer = new byte[65535];
-                    mockServer.RegisterBehavior(new ReadIndicationBehavior(1, 123,  Enumerable.Range(1,32).Select(i => (byte)i).ToArray()))
+                    mockServer.RegisterBehavior(new ReadIndicationBehavior(IndexGroup: 1, IndexOffset: 123, Enumerable.Range(1, 32).Select(i => (byte)i).ToArray()))
                               .RegisterBehavior(new ReadIndicationBehavior(1, 1, Encoding.UTF8.GetBytes("acting as a ADS server")))
                               .RegisterBehavior(new ReadIndicationBehavior(0, 0, null, AdsErrorCode.DeviceAccessDenied))
                               .RegisterBehavior(new WriteIndicationBehavior(0, 0, 22));
@@ -44,19 +45,29 @@ namespace DemoConsole
                         if (client.IsConnected)
                         {
                             // . . .
-                            var buffer = new byte[65535];
-                            var memory = new Memory<byte>(buffer);
+                            var readBuffer = new byte[65535];
+                            var readMemory = new Memory<byte>(readBuffer);
+                            var writeBuffer = new byte[65535];
+                            var writeMemory = new Memory<byte>(writeBuffer);
+
                             // 1st behavior
-                            var resRd = await client.ReadAsync(1, 123, memory[..32], CancellationToken.None);
+                            var resRd = await client.ReadAsync(1, 123, readMemory[..32], CancellationToken.None);
                             // 2nd behavior
-                            resRd = await client.ReadAsync(1, 1, memory, CancellationToken.None);
-                            Console.WriteLine(Encoding.UTF8.GetString(memory.Slice(0,resRd.ReadBytes).Span));
+                            resRd = await client.ReadAsync(1, 1, readMemory, CancellationToken.None);
+                            Console.WriteLine(Encoding.UTF8.GetString(readMemory.Slice(0, resRd.ReadBytes).Span));
                             // 3rd behavior
-                            resRd = await client.ReadAsync(0, 0, memory, CancellationToken.None);
+                            resRd = await client.ReadAsync(0, 0, readMemory, CancellationToken.None);
                             // 4th behavior
-                            var resWr = await client.WriteAsync(0, 0, memory[..22], CancellationToken.None);
+                            var resWr = await client.WriteAsync(0, 0, writeMemory[..22], CancellationToken.None);
                         }
                     }
+
+
+                    var myAdsCls = new MyAdsClass(mockServer.ServerAddress.Port);
+                    var even = await myAdsCls.GetValuesFilteredAsync(1, 123, (x) => x % 2 == 0);
+                    Assert.IsTrue(even.SequenceEqual(new byte[] { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 }));
+                    var odd = await myAdsCls.GetValuesFilteredAsync(1, 123, (x) => x % 2 != 0);
+                    Assert.IsTrue(odd.SequenceEqual(new byte[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31 }));
                 }
             }
 
@@ -65,3 +76,4 @@ namespace DemoConsole
         }
     }
 }
+

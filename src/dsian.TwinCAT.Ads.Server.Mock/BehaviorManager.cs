@@ -15,9 +15,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         }
 
         private Dictionary<Type, List<Behavior>> _BehaviorDictionary = new Dictionary<Type, List<Behavior>>();
-
-        public IReadOnlyDictionary<Type, List<Behavior>> BehaviorDictionary => _BehaviorDictionary;
-
+        public Dictionary<Type, List<Behavior>> BehaviorDictionary => _BehaviorDictionary;
 
         public void RegisterBehavior(Behavior behavior)
         {
@@ -47,6 +45,12 @@ namespace dsian.TwinCAT.Ads.Server.Mock
                 .Select(v => v.Value)                
                 .FirstOrDefault()?
                 .Cast<T>();
+        }
+        public T? GetBehaviorOfType<T>(Func<T,bool> matchFilter) where T : Behavior
+        {
+
+            return GetBehaviorOfType<T>()?.Where(b => matchFilter(b))
+                .FirstOrDefault();
         }
     }
 }
