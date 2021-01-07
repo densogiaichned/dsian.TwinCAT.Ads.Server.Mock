@@ -8,12 +8,6 @@ You don't need to setup a PLC or TwinCAT runtime to test your code, hence no spe
 
 ---
 
-### Prerequisits
-* **TwinCAT ADS must be installed, either**  
-  * [TE1000 | TC3 Engineering](https://www.beckhoff.com/en-en/products/automation/twincat/te1xxx-twincat-3-engineering/te1000.html) or
-  * [TC1000 | TC3 ADS](https://www.beckhoff.com/en-en/products/automation/twincat/tc1xxx-twincat-3-base/tc1000.html) or
-  * via package [Beckhoff.TwinCAT.Ads.TcpRouter](https://www.nuget.org/packages/Beckhoff.TwinCAT.Ads.TcpRouter/).  
-  
 ### How to
 1. **Setup mocking server**  
     ```csharp

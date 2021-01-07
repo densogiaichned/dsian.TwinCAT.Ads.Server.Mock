@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.Server;
+using TwinCAT.Ads.TcpRouter;
 
 namespace dsian.TwinCAT.Ads.Server.Mock
 {
@@ -17,6 +18,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         private ILogger? _Logger = null;
         private BehaviorManager? _behaviorManager = null;
         private string _PortName = "dsian";
+        private AmsTcpIpRouter? _router;
+
         public Mock(string portName) : base(portName)
         {
 
@@ -48,11 +51,31 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             Connect();
         }
 
-        private void Init(string portName, ILogger? logger = null)
+        public override bool Disconnect()
+        {
+            if (_router != null)
+                _router.Stop();
+            return base.Disconnect();
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (_router != null)
+                _router.Stop();
+            base.Dispose(disposing);
+        }
+
+        private async void Init(string portName, ILogger? logger = null)
         {
             _Logger = logger;
             _PortName = portName;
             _behaviorManager = new BehaviorManager(logger);
+            
+            try
+            {
+                _router = new AmsTcpIpRouter(AmsNetId.LocalHost);
+                await _router.StartAsync(CancellationToken.None);
+            }
+            catch { }
         }
         private void Connect()
         {
