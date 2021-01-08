@@ -14,7 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\dsian.TwinCAT.Ads.Server.Mock.Extensions\dsian.TwinCAT.Ads.Server.Mock.Extensions.csproj" />
     <ProjectReference Include="..\..\src\dsian.TwinCAT.Ads.Server.Mock\dsian.TwinCAT.Ads.Server.Mock.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SampleFiles\ReadSymbolsPort851.cap">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

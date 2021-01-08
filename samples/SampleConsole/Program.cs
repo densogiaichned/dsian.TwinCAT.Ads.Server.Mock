@@ -1,4 +1,5 @@
 ﻿using dsian.TwinCAT.Ads.Server.Mock;
+using dsian.TwinCAT.Ads.Server.Mock.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TwinCAT;
 using TwinCAT.Ads;
+using TwinCAT.Ads.TypeSystem;
 
 namespace SampleConsole
 {
@@ -17,7 +20,7 @@ namespace SampleConsole
         {
             using (var serviceProvider = new ServiceCollection()
         .AddLogging(cfg => cfg.AddConsole())
-        .Configure<LoggerFilterOptions>(cfg => cfg.MinLevel = LogLevel.Debug)
+        .Configure<LoggerFilterOptions>(cfg => cfg.MinLevel = LogLevel.Information)
         .BuildServiceProvider())
             {
                 var logger = serviceProvider.GetService<ILogger<Program>>();
@@ -41,7 +44,7 @@ namespace SampleConsole
                     using (var client = new AdsClient(logger))
                     {
                         // connect to our mocking server
-                        client.Connect(port);
+                        client.Connect(mockServer.ServerAddress.Port);
                         if (client.IsConnected)
                         {
                             // . . .
@@ -68,6 +71,27 @@ namespace SampleConsole
                     Assert.IsTrue(even.SequenceEqual(new byte[] { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 }));
                     var odd = await myAdsCls.GetValuesFilteredAsync(1, 123, (x) => x % 2 != 0);
                     Assert.IsTrue(odd.SequenceEqual(new byte[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31 }));
+
+                    Console.WriteLine();
+                    Console.WriteLine(" -- dsian.TwinCAT.Ads.Server.Mock.Extensions -- ");
+                    // dsian.TwinCAT.Ads.Server.Mock.Extensions                   
+                    // Extension to register Behaviors from a recorded TwinCAT Ads Viewer file (*.cap).
+                    // This can be used for more sophisticated ADS requests, like reading symbols from a server.
+                    mockServer.RegisterReplay(@".\SampleFiles\ReadSymbolsPort851.cap");
+
+                    // create TwinCAT Ads client
+                    using (var client = new AdsClient(logger))
+                    {
+                        // connect to our mocking server
+                        client.Connect(mockServer.ServerAddress.Port);
+                        if (client.IsConnected)
+                        {
+                            var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, TwinCAT.Ads.ValueAccess.ValueAccessMode.Default));
+                            var symbols = await symbolLoader.GetSymbolsAsync(CancellationToken.None);
+                            foreach(var symbol in symbols.Symbols)
+                                Console.WriteLine(symbol.InstancePath);
+                        }
+                    }
                 }
             }
 

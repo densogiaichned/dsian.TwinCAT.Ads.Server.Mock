@@ -8,20 +8,26 @@ jobs:
     name: build, pack & publish
     runs-on:  windows-latest 
     steps:
-     - uses: actions/checkout@v2
-     - name: Setup dotnet
-       uses: actions/setup-dotnet@v1
-     - name: Clean nuget
-       run: dotnet nuget locals all --clear 
-     - name: Build                  
-       run: dotnet build -c Release
-     - name: Test
-       run: dotnet test
-      # Publish
-     - name: publish on version change
-       id: publish_nuget
-       uses: rohith/publish-nuget@v2
-       with:
-         # Filepath of the project to be packaged, relative to root of repository
-         PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock/dsian.TwinCAT.Ads.Server.Mock.csproj
-         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+      - name: Clean nuget
+        run: dotnet nuget locals all --clear 
+      - name: Build                  
+        run: dotnet build -c Release
+      - name: Test
+        run: dotnet test
+       # Publish dsian.TwinCAT.Ads.Server.Mock
+      - name: publish on version change
+        id: publish_nuget_mock
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock/dsian.TwinCAT.Ads.Server.Mock.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+       # Publish dsian.TwinCAT.Ads.Server.Mock.Extensions
+      - name: publish on version change
+        id: publish_nuget_mock_extensions
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock.Extensions/dsian.TwinCAT.Ads.Server.Mock.Extensions.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
