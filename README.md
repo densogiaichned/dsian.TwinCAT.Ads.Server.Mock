@@ -6,9 +6,13 @@ Mocking a TwinCAT Ads Server, for unit testing code with ADS read/write requests
 With this Nuget package it is possible to test your code even if it is relying on `TwinCAT.Ads.dll` calls and dependencies on that library (e.g. `TwinCAT.Ads.TypeSystem.SymbolFactory`).  
 You don't need to setup a PLC or TwinCAT runtime to test your code, hence no special requirements on a build server.
 
+* [How-to](#how-to)
+* [Example](#example)
+* [Extensions](#extensions)
+
 ---
 
-### How to
+## How-to
 1. **Setup mocking server**  
     ```csharp
     ushort port = 12345;
@@ -89,7 +93,7 @@ You don't need to setup a PLC or TwinCAT runtime to test your code, hence no spe
         }
     }
     ```
-### Example  
+## Example  
 ```csharp
 // setup mocking server
 ushort port = 12345;
@@ -133,4 +137,6 @@ using (var mockServer = new Mock(port, portName))
 ```
 See `SampleConsole` and `UnitTestSample` for functional examples.
 
-
+## Extensions
+These extension methods are defined in project [dsian.TwinCAT.Ads.Server.Mock.Extensions](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/tree/main/src/dsian.TwinCAT.Ads.Server.Mock.Extensions):
+* [Replay](README.Extensions.md#replay)

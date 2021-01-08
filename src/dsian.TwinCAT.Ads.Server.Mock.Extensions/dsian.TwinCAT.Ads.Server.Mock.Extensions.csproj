@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Authors>densogiaichned</Authors>
+    <Product>dsian.TwinCAT.Ads.Server.Mock</Product>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageTags>Beckhoff TwinCAT TwinCAT.ADS mock test fake</PackageTags>
+    <PackageProjectUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock.Extensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock.Extensions</RepositoryUrl>
+    <Version>0.1.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright (c) 2021 densogiaichned</Copyright>
+    <Description>Some extension methods for dsian.TwinCAT.Ads.Server.Mock</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Bewareofthis\.nuget\packages\dsian.twincat.ads.server.mock\0.5.0\contentFiles\any\net5.0\StaticRoutes.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dsian.TwinCAT.AdsViewer.CapParser.Lib" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dsian.TwinCAT.Ads.Server.Mock\dsian.TwinCAT.Ads.Server.Mock.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -13,10 +13,11 @@ namespace dsian.TwinCAT.Ads.Server.Mock
     /// <summary>
     /// Simple implementation of <see cref="AdsServer"/> which can be used for mocking ADS read/write functions.
     /// </summary>
-    public class Mock : AdsServer
+    public sealed class Mock : AdsServer
     {
         private ILogger? _Logger = null;
         private BehaviorManager? _behaviorManager = null;
+        public BehaviorManager? BehaviorManager => _behaviorManager;
         private string _PortName = "dsian";
         private AmsTcpIpRouter? _router;
 
