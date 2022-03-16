@@ -16,10 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="C:\Users\Bewareofthis\.nuget\packages\beckhoff.twincat.ads.tcprouter\5.0.297\contentFiles\any\net5.0\StaticRoutes.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -28,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Beckhoff.TwinCAT.Ads.Server" Version="5.0.297" />
-    <PackageReference Include="Beckhoff.TwinCAT.Ads.TcpRouter" Version="5.0.297" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads.TcpRouter" Version="5.0.297" ExcludeAssets="contentFiles" />
   </ItemGroup>
 
 </Project>
