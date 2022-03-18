@@ -1,11 +1,14 @@
-name: build
+name: build-test-and-publish-nuget
 on:
   push:
     branches:
-      - main
+      - '*'
+  pull_request:
+    branches:
+      - '*'
 jobs:
   publish:
-    name: build, pack & publish
+    name: build, test & publish
     runs-on:  windows-latest 
     steps:
       - uses: actions/checkout@v2
@@ -13,13 +16,15 @@ jobs:
         uses: actions/setup-dotnet@v1
       - name: Clean nuget
         run: dotnet nuget locals all --clear 
-      - name: Build                  
+      - name: Build
         run: dotnet build -c Release
       - name: Test
+        if: success()
         run: dotnet test
        # Publish dsian.TwinCAT.Ads.Server.Mock
       - name: publish on version change
         id: publish_nuget_mock
+        if: ${{ success() && github.event_name == 'push' || github.ref == 'refs/heads/main'}}
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock/dsian.TwinCAT.Ads.Server.Mock.csproj
@@ -27,6 +32,7 @@ jobs:
        # Publish dsian.TwinCAT.Ads.Server.Mock.Extensions
       - name: publish on version change
         id: publish_nuget_mock_extensions
+        if: ${{ success() && github.event_name == 'push' || github.ref == 'refs/heads/main'}}
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock.Extensions/dsian.TwinCAT.Ads.Server.Mock.Extensions.csproj

@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConsole", "samples\Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dsian.TwinCAT.Ads.Server.Mock.Extensions", "src\dsian.TwinCAT.Ads.Server.Mock.Extensions\dsian.TwinCAT.Ads.Server.Mock.Extensions.csproj", "{54F7734D-E70A-4049-912E-403AFA1727D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests", "tests\dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests\dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests.csproj", "{2B215981-CE4E-4330-AD53-8C8C144C66A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests", "tests\dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests\dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests.csproj", "{2B215981-CE4E-4330-AD53-8C8C144C66A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DFC6521A-9952-4997-BE4C-AF846BA9B673}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
