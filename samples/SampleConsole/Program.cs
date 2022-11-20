@@ -44,6 +44,7 @@ namespace SampleConsole
                     using (var client = new AdsClient(logger))
                     {
                         // connect to our mocking server
+                        Assert.IsNotNull(mockServer.ServerAddress);
                         client.Connect(mockServer.ServerAddress.Port);
                         if (client.IsConnected)
                         {
@@ -77,7 +78,7 @@ namespace SampleConsole
                     // dsian.TwinCAT.Ads.Server.Mock.Extensions                   
                     // Extension to register Behaviors from a recorded TwinCAT Ads Viewer file (*.cap).
                     // This can be used for more sophisticated ADS requests, like reading symbols from a server.
-                    mockServer.RegisterReplay(@".\SampleFiles\ReadSymbolsPort851.cap");
+                    mockServer.RegisterReplay(@"./SampleFiles/ReadSymbolsPort851.cap");
 
                     // create TwinCAT Ads client
                     using (var client = new AdsClient(logger))
@@ -88,6 +89,7 @@ namespace SampleConsole
                         {
                             var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, TwinCAT.Ads.ValueAccess.ValueAccessMode.Default));
                             var symbols = await symbolLoader.GetSymbolsAsync(CancellationToken.None);
+                            Assert.IsNotNull(symbols.Symbols);
                             foreach(var symbol in symbols.Symbols)
                                 Console.WriteLine(symbol.InstancePath);
                         }

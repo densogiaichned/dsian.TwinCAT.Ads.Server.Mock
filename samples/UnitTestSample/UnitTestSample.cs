@@ -18,6 +18,7 @@ namespace UnitTestSample
             using (var mockServer = new Mock(port, portName))   // ILogger optional
             {
                 mockServer.RegisterBehavior(new ReadIndicationBehavior(1, 123, Enumerable.Range(1, 32).Select(i => (byte)i).ToArray()));
+                Assert.IsNotNull(mockServer.ServerAddress);
                 var myAdsCls = new MyAdsClass(mockServer.ServerAddress.Port);
 
                 // act
