@@ -23,8 +23,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         {
             using (var serverMock = new Mock(12345, "AdsServerMock"))
             {
-                serverMock.RegisterReplay(@".\TestFiles\ReadRequestPort10k.cap");
-
+                serverMock.RegisterReplay(@"./TestFiles/ReadRequestPort10k.cap");
+                Assert.IsNotNull(serverMock.BehaviorManager);
                 Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count== 1);
                 var res = serverMock.BehaviorManager.GetBehaviorOfType<ReadIndicationBehavior>();
                 Assert.IsNotNull(res);
@@ -37,7 +37,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         {
             using (var serverMock = new Mock(12346, "AdsServerMock"))
             {
-                serverMock.RegisterReplay(@".\TestFiles\ReadSymbolsPort851.cap");
+                serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
+                Assert.IsNotNull(serverMock.BehaviorManager);
                 Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count == 3);
                 var res = serverMock.BehaviorManager.GetBehaviorOfType<Behavior>();
             }
@@ -48,10 +49,11 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         {
             using (var serverMock = new Mock(12347, "AdsServerMock"))
             {
-                serverMock.RegisterReplay(@".\TestFiles\ReadSymbolsPort851.cap");
+                serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 using (var client = new AdsClient())
                 {
                     // connect to our mocking server
+                    Assert.IsNotNull(serverMock.ServerAddress);
                     client.Connect(serverMock.ServerAddress.Port);
                     if (client.IsConnected)
                     {

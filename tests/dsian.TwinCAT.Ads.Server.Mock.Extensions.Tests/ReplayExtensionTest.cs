@@ -16,7 +16,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                var rpe = new ReplayExtension(netMonFile: null);
+                var rpe = new ReplayExtension(netMonFile: null!);
             });
         }
 
@@ -39,9 +39,10 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public async Task Should_add_one_ReadIndicationBehavior_to_BehaviorList_from_NetMonFile()
         {
-            var capFilePath = @".\TestFiles\ReadRequestPort10k.cap";
-            var (ok, nmf) = await NetMonFileFactory.TryParseNetMonFileAsync(capFilePath, CancellationToken.None,null);
+            var capFilePath = @"./TestFiles/ReadRequestPort10k.cap";
+            var (ok, nmf) = await NetMonFileFactory.TryParseNetMonFileAsync(capFilePath, CancellationToken.None, null);
             Assert.IsTrue(ok);
+            Assert.IsNotNull(nmf);
             var rpe = new ReplayExtension(nmf);
             Assert.IsNotNull(rpe.BehaviorList);
             Assert.AreEqual(rpe.BehaviorList.Count(), 1);
@@ -51,7 +52,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_add_one_ReadIndicationBehavior_to_BehaviorList_from_testfile()
         {
-            var rpe = new ReplayExtension(@".\TestFiles\ReadRequestPort10k.cap");
+            var rpe = new ReplayExtension(@"./TestFiles/ReadRequestPort10k.cap");
 
             Assert.IsNotNull(rpe.BehaviorList);
             Assert.AreEqual(rpe.BehaviorList.Count(), 1);
@@ -61,7 +62,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_add_one_ReadDeviceInfoIndicationBehavior_to_BehaviorList_from_testfile()
         {
-            var rpe = new ReplayExtension(@".\TestFiles\ReadDeviceInfo.cap");
+            var rpe = new ReplayExtension(@"./TestFiles/ReadDeviceInfo.cap");
 
             Assert.IsNotNull(rpe.BehaviorList);
             Assert.AreEqual(rpe.BehaviorList.Count(), 1);
