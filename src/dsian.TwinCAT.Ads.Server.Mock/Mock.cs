@@ -107,7 +107,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
         }
 
 
-        private ValueTuple<bool, int> LenghtIsOk(Memory<byte>? responseData, int readLength)
+        private ValueTuple<bool, int> LengthIsOk(Memory<byte>? responseData, int readLength)
         {
             return responseData switch
             {
@@ -124,7 +124,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             if (behavior is null)
                 return base.ReadIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, cancel);
 
-            var (lenOk, len) = LenghtIsOk(behavior.ResponseData, readLength);
+            var (lenOk, len) = LengthIsOk(behavior.ResponseData, readLength);
             if (lenOk)
                 return ReadResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseData.Slice(0, len), cancel);
             else
@@ -152,7 +152,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
                 return base.ReadWriteIndicationAsync(sender, invokeId, indexGroup, indexOffset, readLength, writeData, cancel);
 
             var errCode = behavior.ExpectedLength == writeData.Length ? behavior.ErrorCode : AdsErrorCode.DeviceInvalidSize;
-            var (lenOk, len) = LenghtIsOk(behavior.ResponseData, readLength);
+            var (lenOk, len) = LengthIsOk(behavior.ResponseData, readLength);
             if (lenOk)
                 return ReadWriteResponseAsync(sender, invokeId, errCode, behavior.ResponseData.Slice(0, len), cancel);
             else
