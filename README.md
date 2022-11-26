@@ -1,5 +1,5 @@
 
-![build](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/workflows/build/badge.svg?branch=main)
+[![build-test-and-publish-nuget](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/actions/workflows/build.yml)
 [![NuGet version (dsian.TwinCAT.AdsViewer.CapParser.Lib)](https://img.shields.io/nuget/v/dsian.TwinCAT.Ads.Server.Mock.svg?style=flat-square)](https://www.nuget.org/packages/dsian.TwinCAT.Ads.Server.Mock/)
 # dsian.TwinCAT.Ads.Server.Mock
 
