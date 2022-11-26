@@ -1,5 +1,6 @@
 
 ![build](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/workflows/build/badge.svg?branch=main)
+[![NuGet version (dsian.TwinCAT.AdsViewer.CapParser.Lib)](https://img.shields.io/nuget/v/dsian.TwinCAT.Ads.Server.Mock.svg?style=flat-square)](https://www.nuget.org/packages/dsian.TwinCAT.Ads.Server.Mock/)
 # dsian.TwinCAT.Ads.Server.Mock
 
 Mocking a TwinCAT Ads Server, for unit testing code with ADS read/write requests.  

@@ -1,5 +1,6 @@
 
 ![build](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock/workflows/build/badge.svg?branch=main)
+[![NuGet version (dsian.TwinCAT.AdsViewer.CapParser.Lib)](https://img.shields.io/nuget/v/dsian.TwinCAT.Ads.Server.Mock.Extensions.svg?style=flat-square)](https://www.nuget.org/packages/dsian.TwinCAT.Ads.Server.Mock.Extensions/)
 # dsian.TwinCAT.Ads.Server.Mock.Extensions
 
 Extension methods for [dsian.TwinCAT.Ads.Server.Mock](https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock), on [Nuget](https://www.nuget.org/packages/dsian.TwinCAT.Ads.Server.Mock/).
