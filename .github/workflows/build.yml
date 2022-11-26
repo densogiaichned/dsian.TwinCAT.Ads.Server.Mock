@@ -31,7 +31,7 @@ jobs:
        # Publish dsian.TwinCAT.Ads.Server.Mock
       - name: publish on version change
         id: publish_nuget_mock
-        if: ${{ success() && github.event_name == 'push' || github.ref == 'refs/heads/main'}}
+        if: ${{ success() && (github.event_name == 'push' || github.ref == 'refs/heads/main')}}
         uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock/dsian.TwinCAT.Ads.Server.Mock.csproj
@@ -40,7 +40,7 @@ jobs:
        # Publish dsian.TwinCAT.Ads.Server.Mock.Extensions
       - name: publish on version change
         id: publish_nuget_mock_extensions
-        if: ${{ success() && github.event_name == 'push' || github.ref == 'refs/heads/main'}}
+        if: ${{ success() && (github.event_name == 'push' || github.ref == 'refs/heads/main')}}
         uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: src/dsian.TwinCAT.Ads.Server.Mock.Extensions/dsian.TwinCAT.Ads.Server.Mock.Extensions.csproj
