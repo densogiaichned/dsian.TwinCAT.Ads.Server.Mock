@@ -17,11 +17,10 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
     [TestClass]
     public class MockReplayExtensionTest
     {
-
         [TestMethod]
         public void Should_register_one_ReadIndicationBehavior_from_testfile()
         {
-            using (var serverMock = new Mock(12345, "AdsServerMock"))
+            using (var serverMock = new Mock(12300, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadRequestPort10k.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
@@ -35,7 +34,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_register_three_Behaviors_from_testfile()
         {
-            using (var serverMock = new Mock(12346, "AdsServerMock"))
+            using (var serverMock = new Mock(12301, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
@@ -47,7 +46,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public async Task Should_read_symbols_from_server()
         {
-            using (var serverMock = new Mock(12347, "AdsServerMock"))
+            using (var serverMock = new Mock(12302, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 using (var client = new AdsClient())

@@ -7,7 +7,7 @@
     <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
     <Authors>densogiaichned</Authors>
     <Company>densogiaichned</Company>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock</PackageProjectUrl>

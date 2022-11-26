@@ -15,6 +15,12 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         private static Mock? _mock = default;
         private static ILogger? _logger = default;
 
+#if NET6_0
+        private const ushort PORT = 12400;
+#else
+        private const ushort PORT = 12401;
+#endif
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -27,7 +33,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
             _logger = serviceProvider.GetService<ILogger<MockTest>>();
 
-            _mock = new Mock(12345, "AdsServerMock", _logger);
+            _mock = new Mock(PORT, "AdsServerMock", _logger);
             Assert.IsTrue(_mock.IsConnected);
 
         }
