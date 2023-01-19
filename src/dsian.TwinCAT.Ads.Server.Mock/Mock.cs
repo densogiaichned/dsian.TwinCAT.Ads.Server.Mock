@@ -198,7 +198,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
         protected override Task<ResultAds> OnWriteControlAsync(AmsAddress sender, uint invokeId, AdsState adsState, ushort deviceState, ReadOnlyMemory<byte> data, CancellationToken cancel)
         {
-            var behavior = _behaviorManager?.GetBehaviorOfType<WriteControlIndicationBehavior>(b => b.ExpectedAdsState == adsState && b.ExpectedDeviceState == deviceState && b.ExpectedLength == data.Length);
+            var behavior = _behaviorManager?.GetBehaviorOfType<WriteControlIndicationBehavior>(b => b.ExpectedAdsState == adsState && b.ExpectedDeviceState == deviceState && b.ExpectedLength == 0);
 
             if (behavior is null)
             {

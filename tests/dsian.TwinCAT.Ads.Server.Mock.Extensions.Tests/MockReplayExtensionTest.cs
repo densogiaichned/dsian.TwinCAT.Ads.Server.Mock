@@ -24,7 +24,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadRequestPort10k.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
-                Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count== 1);
+                Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count == 1);
                 var res = serverMock.BehaviorManager.GetBehaviorOfType<ReadIndicationBehavior>();
                 Assert.IsNotNull(res);
                 Assert.AreEqual(res.Count(), 1);
@@ -62,6 +62,21 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
                     }
                 }
             }
+        }
+
+        [TestMethod]
+        public async Task WriteControl_should_succeed()
+        {
+            using var serverMock = new Mock(12303, "AdsServerMock");
+            serverMock.RegisterReplay(@"./TestFiles/ReadStateWriteControl.cap");
+            using var client = new AdsClient();
+
+            Assert.IsNotNull(serverMock.ServerAddress);
+            client.Connect(serverMock.ServerAddress.Port);
+            Assert.IsTrue(client.IsConnected);
+            var actual = await client.WriteControlAsync(AdsState.Stop, 0, CancellationToken.None);
+            Assert.IsTrue(actual.Succeeded);
+            Assert.AreEqual(actual.ErrorCode, AdsErrorCode.NoError);
         }
     }
 }
