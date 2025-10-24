@@ -37,7 +37,7 @@ using (var serverMock = new Mock(12347, "AdsServerMock"))
         client.Connect(serverMock.ServerAddress.Port);
         if (client.IsConnected)
         {
-            var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, TcAds.ValueAccess.ValueAccessMode.Default));
+            var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, ValueAccessMode.SymbolicByHandle));
             var symbols = await symbolLoader.GetSymbolsAsync(CancellationToken.None);
             Assert.IsTrue(symbols.Succeeded);
         }

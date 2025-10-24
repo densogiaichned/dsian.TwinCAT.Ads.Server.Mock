@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.TypeSystem;
+using TwinCAT.ValueAccess;
 
 namespace SampleConsole
 {
@@ -23,12 +24,13 @@ namespace SampleConsole
         .Configure<LoggerFilterOptions>(cfg => cfg.MinLevel = LogLevel.Information)
         .BuildServiceProvider())
             {
-                var logger = serviceProvider.GetService<ILogger<Program>>();
+                var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<Program>();
 
                 // setup mocking server
                 ushort port = 12345;
                 string portName = "MyTestAdsServer";
-                using (var mockServer = new Mock(port, portName, logger))
+                using (var mockServer = new Mock(port, portName, loggerFactory))
                 {
                     var serverBuffer = new byte[65535];
                     mockServer.RegisterBehavior(new ReadIndicationBehavior(IndexGroup: 1, IndexOffset: 123, Enumerable.Range(1, 32).Select(i => (byte)i).ToArray()))
@@ -41,7 +43,7 @@ namespace SampleConsole
                     // now the actual Ads Read/WriteRequests...
 
                     // create TwinCAT Ads client
-                    using (var client = new AdsClient(logger))
+                    using (var client = new AdsClient(loggerFactory))
                     {
                         // connect to our mocking server
                         Assert.IsNotNull(mockServer.ServerAddress);
@@ -81,13 +83,13 @@ namespace SampleConsole
                     mockServer.RegisterReplay(@"./SampleFiles/ReadSymbolsPort851.cap");
 
                     // create TwinCAT Ads client
-                    using (var client = new AdsClient(logger))
+                    using (var client = new AdsClient(loggerFactory))
                     {
                         // connect to our mocking server
                         client.Connect(mockServer.ServerAddress.Port);
                         if (client.IsConnected)
                         {
-                            var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, TwinCAT.Ads.ValueAccess.ValueAccessMode.Default));
+                            var symbolLoader = SymbolLoaderFactory.Create(client, new SymbolLoaderSettings(SymbolsLoadMode.Flat, ValueAccessMode.SymbolicByHandle));
                             var symbols = await symbolLoader.GetSymbolsAsync(CancellationToken.None);
                             Assert.IsNotNull(symbols.Symbols);
                             foreach(var symbol in symbols.Symbols)
