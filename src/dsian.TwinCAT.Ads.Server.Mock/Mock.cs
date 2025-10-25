@@ -34,21 +34,39 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             Connect();
         }
 
-        public Mock(string portName, ILogger? logger) : base(portName, logger)
+        public Mock(string portName, ILogger? logger) : base(portName, ToLoggerFactory(logger))
         {
             Init(portName, logger);
             Connect();
         }
 
-        public Mock(ushort port, string portName, ILogger? logger) : base(port, portName, logger)
+        public Mock(string portName, ILoggerFactory? loggerFactory) : base(portName, loggerFactory)
+        {
+            Init(portName, loggerFactory: loggerFactory);
+            Connect();
+        }
+
+        public Mock(ushort port, string portName, ILogger? logger) : base(port, portName, ToLoggerFactory(logger))
         {
             Init(portName, logger);
             Connect();
         }
 
-        public Mock(ushort port, string portName, bool useSingleNotificationHandler, ILogger? logger) : base(port, portName, useSingleNotificationHandler, logger)
+        public Mock(ushort port, string portName, ILoggerFactory? loggerFactory) : base(port, portName, loggerFactory)
+        {
+            Init(portName, loggerFactory: loggerFactory);
+            Connect();
+        }
+
+        public Mock(ushort port, string portName, bool useSingleNotificationHandler, ILogger? logger) : base(port, portName, useSingleNotificationHandler, ToLoggerFactory(logger))
         {
             Init(portName, logger);
+            Connect();
+        }
+
+        public Mock(ushort port, string portName, bool useSingleNotificationHandler, ILoggerFactory? loggerFactory) : base(port, portName, useSingleNotificationHandler, loggerFactory)
+        {
+            Init(portName, loggerFactory: loggerFactory);
             Connect();
         }
 
@@ -65,11 +83,12 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             base.Dispose(disposing);
         }
 
-        private async void Init(string portName, ILogger? logger = null)
+        private async void Init(string portName, ILogger? logger = null, ILoggerFactory? loggerFactory = null)
         {
-            _Logger = logger;
+            _Logger = logger ?? loggerFactory?.CreateLogger<Mock>();
             _PortName = portName;
-            _behaviorManager = new BehaviorManager(logger);
+            var behaviorLogger = loggerFactory?.CreateLogger<BehaviorManager>() ?? _Logger;
+            _behaviorManager = new BehaviorManager(behaviorLogger);
 
             try
             {
@@ -344,6 +363,31 @@ namespace dsian.TwinCAT.Ads.Server.Mock
             return ReadDeviceInfoResponseAsync(sender, invokeId, behavior.ErrorCode, behavior.ResponseDeviceName, new AdsVersion(behavior.ResponseMajorVersion, behavior.ResponseMinorVersion, behavior.VersionBuild), cancel);
         }
         #endregion
+
+        private static ILoggerFactory? ToLoggerFactory(ILogger? logger)
+        {
+            return logger is null ? null : new SingleLoggerFactory(logger);
+        }
+
+        private sealed class SingleLoggerFactory : ILoggerFactory
+        {
+            private readonly ILogger _logger;
+
+            public SingleLoggerFactory(ILogger logger)
+            {
+                _logger = logger;
+            }
+
+            public void AddProvider(ILoggerProvider provider)
+            {
+            }
+
+            public ILogger CreateLogger(string categoryName) => _logger;
+
+            public void Dispose()
+            {
+            }
+        }
 
     }
 }

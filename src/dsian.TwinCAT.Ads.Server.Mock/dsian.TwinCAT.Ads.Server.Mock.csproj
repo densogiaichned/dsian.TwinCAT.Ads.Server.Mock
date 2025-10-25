@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beckhoff.TwinCAT.Ads.Server" Version="6.0.216" />
-    <PackageReference Include="Beckhoff.TwinCAT.Ads.TcpRouter" Version="6.0.216" ExcludeAssets="contentFiles" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads.Server" Version="6.2.521" />
+    <PackageReference Include="Beckhoff.TwinCAT.Ads.TcpRouter" Version="6.2.521" ExcludeAssets="contentFiles" />
   </ItemGroup>
 
 </Project>
