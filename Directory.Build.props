@@ -1,0 +1,10 @@
+<Project>
+    <!-- Common settings for all SDK-style C# projects in this repository -->
+    <PropertyGroup>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <WarningsAsErrors>nullable</WarningsAsErrors>
+    </PropertyGroup>
+</Project>

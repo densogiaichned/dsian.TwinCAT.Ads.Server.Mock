@@ -66,7 +66,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
                 // assert
                 Assert.IsTrue(result.Succeeded);
-                Assert.AreEqual(result.ReadBytes, buffer.Length);
+                Assert.HasCount(result.ReadBytes, buffer);
                 Assert.IsTrue(buffer.SequenceEqual(Enumerable.Range(1, buffer.Length).Select(i => (byte)i).ToArray()));
             }
         }
@@ -114,7 +114,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
                 // assert
                 Assert.IsTrue(result.Succeeded);
-                Assert.AreEqual(result.ReadBytes, rdBuffer.Length);
+                Assert.HasCount(result.ReadBytes, rdBuffer);
                 Assert.IsTrue(rdBuffer.SequenceEqual(Enumerable.Range(1, rdBuffer.Length).Select(i => (byte)i).ToArray()));
             }
         }

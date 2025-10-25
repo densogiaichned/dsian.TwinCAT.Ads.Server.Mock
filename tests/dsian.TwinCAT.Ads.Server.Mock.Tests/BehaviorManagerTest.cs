@@ -14,7 +14,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         {
             var bm = new BehaviorManager(null);
             bm.RegisterBehavior(new ReadIndicationBehavior(1, 1, null, AdsErrorCode.NoError));
-            Assert.AreEqual(bm.BehaviorDictionary.Keys.Count, 1);
+            Assert.HasCount(1, bm.BehaviorDictionary.Keys);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
             bm.RegisterBehavior(new ReadWriteIndicationBehavior(1, 1, 1, null, AdsErrorCode.NoError));
             bm.RegisterBehavior(new WriteControlIndicationBehavior(AdsState.Config, 1, 1, AdsErrorCode.NoError));
 
-            Assert.AreEqual(bm.BehaviorDictionary.Keys.Count, 8);
+            Assert.HasCount(8, bm.BehaviorDictionary.Keys);
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
             var res = bm.GetBehaviorOfType<WriteIndicationBehavior>();
             Assert.IsNotNull(res);
-            Assert.AreEqual(res.Count(), 3);
+            Assert.AreEqual(3, res.Count());
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
             var res = bm.GetBehaviorOfType<ReadIndicationBehavior>(b => b.IndexGroup == 1 && b.IndexOffset == 1 && b.ResponseData.Length == 123);
             Assert.IsNotNull(res);
             Assert.IsInstanceOfType(res, typeof(ReadIndicationBehavior));
-            Assert.AreEqual(res.ResponseData.Length, 123);
+            Assert.AreEqual(123, res.ResponseData.Length);
         }
     }
 }

@@ -11,6 +11,6 @@ namespace dsian.TwinCAT.Ads.Server.Mock
     /// <summary>
     /// Base behavior, internal use only
     /// </summary>
-    public abstract record Behavior(uint IndexGroup, uint IndexOffset, Memory<byte> ResponseData, AdsErrorCode ErrorCode = AdsErrorCode.Succeeded);
+    public abstract record Behavior(uint IndexGroup, uint IndexOffset, Memory<byte> ResponseData, AdsErrorCode ErrorCode = AdsErrorCode.NoError);
 
 }

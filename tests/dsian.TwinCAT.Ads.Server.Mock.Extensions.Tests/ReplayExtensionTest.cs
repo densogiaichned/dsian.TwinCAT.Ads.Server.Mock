@@ -14,7 +14,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_throw_ArgumentNullException_parameter_netMonFile()
         {
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 var rpe = new ReplayExtension(netMonFile: null!);
             });
@@ -23,7 +23,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_throw_ArgumentNullException_parameter_path()
         {
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 var rpe = new ReplayExtension("");
             });
@@ -45,7 +45,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             Assert.IsNotNull(nmf);
             var rpe = new ReplayExtension(nmf);
             Assert.IsNotNull(rpe.BehaviorList);
-            Assert.AreEqual(rpe.BehaviorList.Count(), 1);
+            Assert.AreEqual(1, rpe.BehaviorList.Count());
             Assert.IsInstanceOfType(rpe.BehaviorList.First(), typeof(ReadIndicationBehavior));
         }
 
@@ -55,7 +55,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             var rpe = new ReplayExtension(@"./TestFiles/ReadRequestPort10k.cap");
 
             Assert.IsNotNull(rpe.BehaviorList);
-            Assert.AreEqual(rpe.BehaviorList.Count(), 1);
+            Assert.AreEqual(1, rpe.BehaviorList.Count());
             Assert.IsInstanceOfType(rpe.BehaviorList.First(), typeof(ReadIndicationBehavior));
         }
 
@@ -65,7 +65,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             var rpe = new ReplayExtension(@"./TestFiles/ReadDeviceInfo.cap");
 
             Assert.IsNotNull(rpe.BehaviorList);
-            Assert.AreEqual(rpe.BehaviorList.Count(), 1);
+            Assert.AreEqual(1, rpe.BehaviorList.Count());
             Assert.IsInstanceOfType(rpe.BehaviorList.First(), typeof(ReadDeviceInfoIndicationBehavior));
         }
 

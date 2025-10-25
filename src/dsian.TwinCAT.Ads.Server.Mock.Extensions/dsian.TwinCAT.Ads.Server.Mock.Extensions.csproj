@@ -1,27 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>nullable</WarningsAsErrors>
-    <LangVersion>11.0</LangVersion>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
     <Authors>densogiaichned</Authors>
     <Company>densogiaichned</Company>
-    <Version>0.7.0</Version>
+    <Version>0.8.0</Version>
     <Product>dsian.TwinCAT.Ads.Server.Mock.Extensions</Product>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>Beckhoff TwinCAT TwinCAT.ADS mock test fake</PackageTags>
     <PackageProjectUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/densogiaichned/dsian.TwinCAT.Ads.Server.Mock</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Copyright>Copyright (c) 2021-2022 densogiaichned</Copyright>
+    <Copyright>Copyright (c) 2021-2025 densogiaichned</Copyright>
     <Description>Some extension methods for dsian.TwinCAT.Ads.Server.Mock</Description>
+    <PackageReadmeFile>README.Extensions.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\README.Extensions.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

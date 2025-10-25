@@ -24,10 +24,10 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadRequestPort10k.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
-                Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count == 1);
+                Assert.HasCount(1, serverMock.BehaviorManager.BehaviorDictionary.Keys);
                 var res = serverMock.BehaviorManager.GetBehaviorOfType<ReadIndicationBehavior>();
                 Assert.IsNotNull(res);
-                Assert.AreEqual(res.Count(), 1);
+                Assert.AreEqual(1, res.Count());
             }
         }
 
@@ -38,7 +38,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
-                Assert.IsTrue(serverMock.BehaviorManager.BehaviorDictionary.Keys.Count == 3);
+                Assert.HasCount(3, serverMock.BehaviorManager.BehaviorDictionary.Keys);
                 var res = serverMock.BehaviorManager.GetBehaviorOfType<Behavior>();
             }
         }
@@ -76,7 +76,8 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
             Assert.IsTrue(client.IsConnected);
             var actual = await client.WriteControlAsync(AdsState.Stop, 0, CancellationToken.None);
             Assert.IsTrue(actual.Succeeded);
-            Assert.AreEqual(actual.ErrorCode, AdsErrorCode.NoError);
+            Assert.AreEqual(AdsErrorCode.NoError, actual.ErrorCode);
         }
     }
 }
+

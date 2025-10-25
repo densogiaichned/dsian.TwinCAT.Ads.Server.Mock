@@ -7,6 +7,6 @@ namespace dsian.TwinCAT.Ads.Server.Mock
     /// <summary>
     /// Behavior / response for a ADS WriteIndication
     /// </summary>    
-    public record WriteIndicationBehavior(uint IndexGroup, uint IndexOffset, int ExpectedLength, AdsErrorCode ErrorCode = AdsErrorCode.Succeeded)
+    public record WriteIndicationBehavior(uint IndexGroup, uint IndexOffset, int ExpectedLength, AdsErrorCode ErrorCode = AdsErrorCode.NoError)
     : Behavior(IndexGroup, IndexOffset, null, ErrorCode);
 }
