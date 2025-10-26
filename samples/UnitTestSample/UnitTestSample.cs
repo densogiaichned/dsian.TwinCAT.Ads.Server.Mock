@@ -9,7 +9,7 @@ namespace UnitTestSample
     [TestClass]
     public class UnitTestSample
     {
-        private static ushort _port = (ushort)(1000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+        private static ushort _port = (ushort)(2000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
 
         [TestInitialize]
         public void TestInitialize()
