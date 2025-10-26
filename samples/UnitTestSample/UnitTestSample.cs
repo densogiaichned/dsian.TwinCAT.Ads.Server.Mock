@@ -9,14 +9,20 @@ namespace UnitTestSample
     [TestClass]
     public class UnitTestSample
     {
+        private static ushort _port = (ushort)(1000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _port += 1;
+        }
+
         [TestMethod]
         public async Task Should_filter_even_and_odd_values()
         {
             // arrange
-            ushort port = (ushort)(2000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
-
             string portName = "MyTestAdsServer";
-            using (var mockServer = new Mock(port, portName))   // ILogger optional
+            using (var mockServer = new Mock(_port, portName))   // ILogger optional
             {
                 mockServer.RegisterBehavior(new ReadIndicationBehavior(1, 123, Enumerable.Range(1, 32).Select(i => (byte)i).ToArray()));
                 Assert.IsNotNull(mockServer.ServerAddress);
