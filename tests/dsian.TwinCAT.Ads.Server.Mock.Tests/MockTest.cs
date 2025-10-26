@@ -49,18 +49,16 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
             Assert.IsNotNull(_mock);
             Assert.IsNotNull(_mock.ServerAddress);
             _mock.RegisterBehavior(new ReadIndicationBehavior(ig, io, Enumerable.Range(1, buffer.Length).Select(i => (byte)i).ToArray()));
-            using (var client = new AdsClient())
-            {
-                client.Connect(_mock.ServerAddress.Port);
+            using var client = new AdsClient();
+            client.Connect(_mock.ServerAddress.Port);
 
-                // act
-                var result = await client.ReadAsync(ig, io, buffer, CancellationToken.None);
+            // act
+            var result = await client.ReadAsync(ig, io, buffer, CancellationToken.None);
 
-                // assert
-                Assert.IsTrue(result.Succeeded);
-                Assert.HasCount(result.ReadBytes, buffer);
-                Assert.IsTrue(buffer.SequenceEqual(Enumerable.Range(1, buffer.Length).Select(i => (byte)i).ToArray()));
-            }
+            // assert
+            Assert.IsTrue(result.Succeeded);
+            Assert.HasCount(result.ReadBytes, buffer);
+            Assert.IsTrue(buffer.SequenceEqual(Enumerable.Range(1, buffer.Length).Select(i => (byte)i).ToArray()));
         }
 
         [TestMethod]
@@ -73,16 +71,14 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
             Assert.IsNotNull(_mock);
             Assert.IsNotNull(_mock.ServerAddress);
             _mock.RegisterBehavior(new WriteIndicationBehavior(ig, io, buffer.Length));
-            using (var client = new AdsClient())
-            {
-                client.Connect(_mock.ServerAddress.Port);
+            using var client = new AdsClient();
+            client.Connect(_mock.ServerAddress.Port);
 
-                // act
-                var result = await client.WriteAsync(ig, io, buffer, CancellationToken.None);
+            // act
+            var result = await client.WriteAsync(ig, io, buffer, CancellationToken.None);
 
-                // assert
-                Assert.IsTrue(result.Succeeded);
-            }
+            // assert
+            Assert.IsTrue(result.Succeeded);
         }
 
 
@@ -97,18 +93,16 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
             Assert.IsNotNull(_mock);
             Assert.IsNotNull(_mock.ServerAddress);
             _mock.RegisterBehavior(new ReadWriteIndicationBehavior(ig, io, rdBuffer.Length, Enumerable.Range(1, rdBuffer.Length).Select(i => (byte)i).ToArray()));
-            using (var client = new AdsClient())
-            {
-                client.Connect(_mock.ServerAddress.Port);
+            using var client = new AdsClient();
+            client.Connect(_mock.ServerAddress.Port);
 
-                // act
-                var result = await client.ReadWriteAsync(ig, io, rdBuffer, wrBuffer, CancellationToken.None);
+            // act
+            var result = await client.ReadWriteAsync(ig, io, rdBuffer, wrBuffer, CancellationToken.None);
 
-                // assert
-                Assert.IsTrue(result.Succeeded);
-                Assert.HasCount(result.ReadBytes, rdBuffer);
-                Assert.IsTrue(rdBuffer.SequenceEqual(Enumerable.Range(1, rdBuffer.Length).Select(i => (byte)i).ToArray()));
-            }
+            // assert
+            Assert.IsTrue(result.Succeeded);
+            Assert.HasCount(result.ReadBytes, rdBuffer);
+            Assert.IsTrue(rdBuffer.SequenceEqual(Enumerable.Range(1, rdBuffer.Length).Select(i => (byte)i).ToArray()));
         }
     }
 }
