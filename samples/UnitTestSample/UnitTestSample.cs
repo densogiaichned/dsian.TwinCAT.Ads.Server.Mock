@@ -12,22 +12,19 @@ namespace UnitTestSample
     [DoNotParallelize]
     public class UnitTestSample
     {
-        private TcpListener? _listener = default;
+        private static int _nextPort = Environment.Version.Major * 100 + 25000;
         private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _listener = new TcpListener(IPAddress.Loopback, 0);
-            _listener.Start();
-            _port = (ushort)((IPEndPoint)_listener.LocalEndpoint).Port;
+            _port = (ushort)Interlocked.Increment(ref _nextPort);
         }
 
 
         [TestCleanup]
         public void TestCleanup()
         {
-            _listener?.Stop();
         }
 
         [TestMethod]
