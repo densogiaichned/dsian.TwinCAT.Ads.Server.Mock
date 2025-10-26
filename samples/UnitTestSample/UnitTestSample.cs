@@ -2,6 +2,8 @@ using dsian.TwinCAT.Ads.Server.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SampleConsole;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace UnitTestSample
@@ -9,13 +11,22 @@ namespace UnitTestSample
     [TestClass]
     public class UnitTestSample
     {
-        private static int _nextPort  = Environment.Version.Major * 1000 + 500;
+        private TcpListener? _listener = default;
         private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _port = (ushort) Interlocked.Increment(ref _nextPort);
+            _listener = new TcpListener(IPAddress.Loopback, 0);
+            _listener.Start();
+            _port = (ushort)((IPEndPoint)_listener.LocalEndpoint).Port;
+        }
+
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _listener?.Stop();
         }
 
         [TestMethod]

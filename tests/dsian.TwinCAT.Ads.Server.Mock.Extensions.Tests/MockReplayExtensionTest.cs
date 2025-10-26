@@ -1,4 +1,6 @@
-﻿using TwinCAT;
+﻿using System.Net;
+using System.Net.Sockets;
+using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.ValueAccess;
@@ -8,13 +10,22 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
     [TestClass]
     public class MockReplayExtensionTest
     {
-        private static int _nextPort  = Environment.Version.Major * 1000;
+        private TcpListener? _listener = default;
         private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _port = (ushort) Interlocked.Increment(ref _nextPort);
+            _listener = new TcpListener(IPAddress.Loopback, 0);
+            _listener.Start();
+            _port = (ushort)((IPEndPoint)_listener.LocalEndpoint).Port;
+        }
+
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _listener?.Stop();
         }
 
         [TestMethod]

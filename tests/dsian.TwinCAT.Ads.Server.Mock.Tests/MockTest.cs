@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Net;
+using System.Net.Sockets;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TwinCAT.Ads;
 
@@ -10,13 +12,16 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         private Mock? _mock = default;
         private ILogger? _logger = default;
 
-        private static int _nextPort  = Environment.Version.Major * 1000 + 200;
+        private TcpListener? _listener = default;
         private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _port = (ushort) Interlocked.Increment(ref _nextPort);
+            _listener = new TcpListener(IPAddress.Loopback, 0);
+            _listener.Start();
+            _port = (ushort)((IPEndPoint)_listener.LocalEndpoint).Port;
+
             Console.WriteLine("Setting up Mock server");
 
             var serviceProvider = new ServiceCollection()
@@ -34,6 +39,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         [TestCleanup]
         public void TestCleanup()
         {
+            _listener?.Stop();
             _mock?.Disconnect();
             _mock?.Dispose();
         }
