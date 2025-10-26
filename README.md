@@ -7,9 +7,9 @@ Mocking a TwinCAT Ads Server, for unit testing code with ADS read/write requests
 With this Nuget package it is possible to test your code even if it is relying on `TwinCAT.Ads.dll` calls and dependencies on that library (e.g. `TwinCAT.Ads.TypeSystem.SymbolFactory`).  
 You don't need to setup a PLC or TwinCAT runtime to test your code, hence no special requirements on a build server.
 
-* [How-to](#how-to)
-* [Example](#example)
-* [Extensions](#extensions)
+* [dsian.TwinCAT.Ads.Server.Mock](#dsiantwincatadsservermock)
+  * [How-to](#how-to)
+  * [Extensions](#extensions)
 
 ---
 
@@ -18,7 +18,7 @@ You don't need to setup a PLC or TwinCAT runtime to test your code, hence no spe
     ```csharp
     ushort port = 12345;
     string portName = "MyTestAdsServer";
-    using (var mockServer = new Mock(port, portName))   // ILogger optional
+    using (var mockServer = new Mock(port, portName))   // ILogger *optional*
     {
         // ...
     }
@@ -31,7 +31,7 @@ You don't need to setup a PLC or TwinCAT runtime to test your code, hence no spe
             .RegisterBehavior(new WriteIndicationBehavior(0, 0, 22));
     ```
     * **Behaviors**  
-    Behaviros like `ReadIndicationBehavior` are used as enpdpoint for a specific ADS call, e.g.  
+    Behaviors like `ReadIndicationBehavior` are used as endpoint for a specific ADS call, e.g.  
         ```csharp
         new ReadIndicationBehavior(1, 123,  Enumerable.Range(1,32).Select(i => (byte)i).ToArray())
         ```
