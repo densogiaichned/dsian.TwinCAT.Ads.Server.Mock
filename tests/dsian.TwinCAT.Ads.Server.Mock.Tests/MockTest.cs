@@ -16,11 +16,6 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         public void TestInitialize()
         {
             _port += 1;
-        }
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
             Console.WriteLine("Setting up Mock server");
 
             var serviceProvider = new ServiceCollection()
