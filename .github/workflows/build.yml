@@ -23,9 +23,9 @@ jobs:
       - name: Build
         run: dotnet build -c Release
       - name: Test .net8
-        run: dotnet test -f net8.0 -c Release --no-build
+        run: dotnet test -f net8.0 -c Release --no-build --settings mstest.runsettings
       - name: Test .net9
-        run: dotnet test -f net9.0 -c Release --no-build
+        run: dotnet test -f net9.0 -c Release --no-build --settings mstest.runsettings
 
        # Publish dsian.TwinCAT.Ads.Server.Mock
       - name: publish on version change
