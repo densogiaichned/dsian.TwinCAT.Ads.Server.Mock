@@ -13,7 +13,8 @@ namespace UnitTestSample
         public async Task Should_filter_even_and_odd_values()
         {
             // arrange
-            ushort port = 12345;
+            ushort port = (ushort)(2000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+
             string portName = "MyTestAdsServer";
             using (var mockServer = new Mock(port, portName))   // ILogger optional
             {

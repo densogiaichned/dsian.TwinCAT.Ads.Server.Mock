@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using TwinCAT.Ads;
 
 namespace dsian.TwinCAT.Ads.Server.Mock.Tests
@@ -15,16 +10,18 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         private static Mock? _mock = default;
         private static ILogger? _logger = default;
 
-#if NET6_0
-        private const ushort PORT = 12400;
-#else
-        private const ushort PORT = 12401;
-#endif
+        private static ushort _port = (ushort)(1000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _port += 1;
+        }
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            System.Console.WriteLine("Setting up Mock server");
+            Console.WriteLine("Setting up Mock server");
 
             var serviceProvider = new ServiceCollection()
                 .AddLogging(cfg => cfg.AddConsole())
@@ -33,7 +30,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
             _logger = serviceProvider.GetService<ILogger<MockTest>>();
 
-            _mock = new Mock(PORT, "AdsServerMock", _logger);
+            _mock = new Mock(_port, "AdsServerMock", _logger);
             Assert.IsTrue(_mock.IsConnected);
 
         }

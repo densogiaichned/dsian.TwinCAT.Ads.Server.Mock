@@ -95,7 +95,10 @@ namespace dsian.TwinCAT.Ads.Server.Mock
                 _router = new AmsTcpIpRouter(AmsNetId.LocalHost);
                 await _router.StartAsync(CancellationToken.None);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _Logger?.LogError(ex, $"Could not start {nameof(AmsTcpIpRouter)} for server \"{{ServerName}}\".", _PortName);
+            }
         }
 
         private void Connect()
@@ -280,6 +283,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock
 
             if (behavior is null)
                 return base.WriteIndicationAsync(target, invokeId, indexGroup, indexOffset, writeData, cancel);
+
 
             var errCode = behavior.ExpectedLength == writeData.Length ? behavior.ErrorCode : AdsErrorCode.DeviceInvalidSize;
             return WriteResponseAsync(target, invokeId, behavior.ErrorCode, cancel);

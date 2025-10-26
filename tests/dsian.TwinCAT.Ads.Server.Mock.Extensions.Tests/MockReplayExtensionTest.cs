@@ -1,13 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using TwinCAT;
+﻿using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.ValueAccess;
@@ -17,10 +8,18 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
     [TestClass]
     public class MockReplayExtensionTest
     {
+        private static ushort _port = (ushort)(Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _port += 1;
+        }
+
         [TestMethod]
         public void Should_register_one_ReadIndicationBehavior_from_testfile()
         {
-            using (var serverMock = new Mock(12300, "AdsServerMock"))
+            using (var serverMock = new Mock(_port, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadRequestPort10k.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
@@ -34,7 +33,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public void Should_register_three_Behaviors_from_testfile()
         {
-            using (var serverMock = new Mock(12301, "AdsServerMock"))
+            using (var serverMock = new Mock(_port, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 Assert.IsNotNull(serverMock.BehaviorManager);
@@ -46,7 +45,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public async Task Should_read_symbols_from_server()
         {
-            using (var serverMock = new Mock(12302, "AdsServerMock"))
+            using (var serverMock = new Mock(_port, "AdsServerMock"))
             {
                 serverMock.RegisterReplay(@"./TestFiles/ReadSymbolsPort851.cap");
                 using (var client = new AdsClient())
@@ -67,7 +66,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
         [TestMethod]
         public async Task WriteControl_should_succeed()
         {
-            using var serverMock = new Mock(12303, "AdsServerMock");
+            using var serverMock = new Mock(_port, "AdsServerMock");
             serverMock.RegisterReplay(@"./TestFiles/ReadStateWriteControl.cap");
             using var client = new AdsClient();
 
