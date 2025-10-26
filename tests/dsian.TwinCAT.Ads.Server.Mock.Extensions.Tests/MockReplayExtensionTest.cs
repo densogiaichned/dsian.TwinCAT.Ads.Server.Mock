@@ -8,7 +8,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
     [TestClass]
     public class MockReplayExtensionTest
     {
-        private static ushort _port = (ushort)(Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+        private static ushort _port = (ushort)(Environment.Version.Major * 1000);
 
         [TestInitialize]
         public void TestInitialize()

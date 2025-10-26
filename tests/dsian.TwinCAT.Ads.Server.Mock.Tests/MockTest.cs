@@ -10,7 +10,7 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
         private static Mock? _mock = default;
         private static ILogger? _logger = default;
 
-        private static ushort _port = (ushort)(1000 + Environment.Version.Major * 1000 + Environment.Version.Minor * 100 + Environment.Version.Build);
+        private static ushort _port = (ushort)(Environment.Version.Major * 1000 + 200);
 
         [TestInitialize]
         public void TestInitialize()
