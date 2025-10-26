@@ -7,6 +7,7 @@ using TwinCAT.Ads;
 namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public class MockTest
     {
         private Mock? _mock = default;

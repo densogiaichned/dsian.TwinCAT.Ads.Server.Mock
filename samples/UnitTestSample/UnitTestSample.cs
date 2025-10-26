@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace UnitTestSample
 {
     [TestClass]
+    [DoNotParallelize]
     public class UnitTestSample
     {
         private TcpListener? _listener = default;

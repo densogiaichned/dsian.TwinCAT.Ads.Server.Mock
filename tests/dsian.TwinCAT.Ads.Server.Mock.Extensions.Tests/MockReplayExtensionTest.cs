@@ -8,6 +8,7 @@ using TwinCAT.ValueAccess;
 namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public class MockReplayExtensionTest
     {
         private TcpListener? _listener = default;
