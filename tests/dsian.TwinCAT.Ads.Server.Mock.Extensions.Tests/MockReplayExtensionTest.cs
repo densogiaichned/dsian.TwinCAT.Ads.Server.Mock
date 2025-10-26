@@ -8,12 +8,13 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Extensions.Tests
     [TestClass]
     public class MockReplayExtensionTest
     {
-        private static ushort _port = (ushort)(Environment.Version.Major * 1000);
+        private static int _nextPort  = Environment.Version.Major * 1000;
+        private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _port += 1;
+            _port = (ushort) Interlocked.Increment(ref _nextPort);
         }
 
         [TestMethod]

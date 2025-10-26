@@ -7,15 +7,16 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
     [TestClass]
     public class MockTest
     {
-        private static Mock? _mock = default;
-        private static ILogger? _logger = default;
+        private Mock? _mock = default;
+        private ILogger? _logger = default;
 
-        private static ushort _port = (ushort)(Environment.Version.Major * 1000 + 200);
+        private static int _nextPort  = Environment.Version.Major * 1000 + 200;
+        private ushort _port;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _port += 1;
+            _port = (ushort) Interlocked.Increment(ref _nextPort);
             Console.WriteLine("Setting up Mock server");
 
             var serviceProvider = new ServiceCollection()
@@ -30,13 +31,11 @@ namespace dsian.TwinCAT.Ads.Server.Mock.Tests
 
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
+        [TestCleanup]
+        public void TestCleanup()
         {
-            if (_mock is not null)
-            {
-                _mock.Disconnect();
-            }
+            _mock?.Disconnect();
+            _mock?.Dispose();
         }
 
         [TestMethod]
